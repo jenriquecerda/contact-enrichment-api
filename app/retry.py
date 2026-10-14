@@ -4,11 +4,8 @@ import asyncio
 import random
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from typing import TypeVar
 
 from app.sources.base import TransientSourceError
-
-T = TypeVar("T")
 
 
 @dataclass(frozen=True)
@@ -24,7 +21,7 @@ class RetryPolicy:
         return (rng or random).uniform(0, cap)
 
 
-async def with_retry(
+async def with_retry[T](
     call: Callable[[], Awaitable[T]],
     policy: RetryPolicy,
     sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
