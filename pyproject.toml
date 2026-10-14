@@ -1,0 +1,31 @@
+[project]
+name = "contact-enrichment-api"
+version = "0.1.0"
+description = "Contact enrichment service: multi-source research, conflict resolution, confidence scoring and async jobs."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "psycopg[binary]>=3.2",
+    "taskiq>=0.11",
+    "taskiq-redis>=1.0",
+    "redis>=5.0",
+    "httpx>=0.27",
+    "uvicorn[standard]>=0.30",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
