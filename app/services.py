@@ -108,8 +108,10 @@ async def run_job(
 ) -> EnrichmentJob | None:
     job = session.get(EnrichmentJob, job_id, with_for_update=True)
     if job is None or job.status not in OPEN_STATUSES:
-        session.rollback()
-        return job  # unknown or already finished: duplicate delivery, nothing to do
+        # Unknown or already finished: a duplicate delivery, nothing to do. Commit (not
+        # rollback) to release the row lock without expiring the job for the caller.
+        session.commit()
+        return job
 
     job.status = JobStatus.RUNNING
     job.attempts += 1
