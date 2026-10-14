@@ -1,0 +1,14 @@
+{
+  "ana lopez|acme": {
+    "observed_at": "2026-09-28T00:00:00+00:00",
+    "fields": {
+      "title": "VP of Revenue Operations",
+      "linkedin_url": "https://www.linkedin.com/in/ana-lopez-revops/",
+      "location": "Austin, Texas"
+    }
+  },
+  "luis garza|northwind": {
+    "observed_at": "2026-09-15T00:00:00+00:00",
+    "fields": {"title": "Head of Sales", "location": "Monterrey, MX"}
+  }
+}

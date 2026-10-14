@@ -1,0 +1,10 @@
+{
+  "ana lopez|acme": {
+    "observed_at": "2026-09-20T00:00:00+00:00",
+    "fields": {"company": "Acme Inc.", "domain": "acme.com", "location": "Austin, TX"}
+  },
+  "luis garza|northwind": {
+    "observed_at": "2026-08-01T00:00:00+00:00",
+    "fields": {"company": "Northwind LLC", "domain": "northwind.io"}
+  }
+}
