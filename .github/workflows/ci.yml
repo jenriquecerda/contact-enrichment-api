@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: enrich
+          POSTGRES_PASSWORD: enrich
+          POSTGRES_DB: enrich
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U enrich" --health-interval 3s --health-retries 20
+    env:
+      DATABASE_URL: postgresql+psycopg://enrich:enrich@localhost:5432/enrich
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ".[dev]"
+      - run: ruff check .
+      - name: Migrations apply cleanly up and down
+        run: alembic upgrade head && alembic downgrade base && alembic upgrade head
+      - run: pytest -q

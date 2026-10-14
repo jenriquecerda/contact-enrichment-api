@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: enrich
+      POSTGRES_PASSWORD: enrich
+      POSTGRES_DB: enrich
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U enrich"]
+      interval: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+
+  migrate:
+    build: .
+    command: alembic upgrade head
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  api:
+    build: .
+    env_file: .env
+    ports: ["8000:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_started}
+
+  worker:
+    build: .
+    command: taskiq worker app.worker:broker
+    env_file: .env
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_started}
