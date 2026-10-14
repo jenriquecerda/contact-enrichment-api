@@ -6,11 +6,11 @@ from app.domain.models import Candidate, ContactInput, FieldName
 from app.domain.normalize import email_domain, normalize_domain
 
 PATTERNS = {
-    "first.last": lambda f, l: f"{f}.{l}",
-    "flast": lambda f, l: f"{f[0]}{l}",
-    "first": lambda f, l: f,
-    "firstl": lambda f, l: f"{f}{l[0]}",
-    "first_last": lambda f, l: f"{f}_{l}",
+    "first.last": lambda first, last: f"{first}.{last}",
+    "flast": lambda first, last: f"{first[0]}{last}",
+    "first": lambda first, last: first,
+    "firstl": lambda first, last: f"{first}{last[0]}",
+    "first_last": lambda first, last: f"{first}_{last}",
 }
 
 
