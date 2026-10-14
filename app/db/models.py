@@ -49,7 +49,9 @@ class EnrichmentJob(Base):
         Enum(JobStatus, name="job_status", values_callable=lambda e: [m.value for m in e]),
         default=JobStatus.QUEUED,
     )
+    attempts: Mapped[int] = mapped_column(default=0)
     error: Mapped[str | None] = mapped_column(Text)
+    source_errors: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -58,7 +60,7 @@ class EnrichmentJob(Base):
 
 
 class ContactField(Base):
-    """Resolved value for one field from one enrichment job."""
+    """Resolved value for one field. `is_current` marks the latest; older rows are history."""
 
     __tablename__ = "contact_fields"
 
@@ -75,6 +77,7 @@ class ContactField(Base):
     conflict: Mapped[bool] = mapped_column(Boolean, default=False)
     sources: Mapped[list] = mapped_column(JSON, default=list)
     reasoning: Mapped[str] = mapped_column(Text, default="")
+    is_current: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
     resolved_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_now, server_default=func.now()
     )
